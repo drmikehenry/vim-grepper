@@ -983,11 +983,15 @@ function! s:finish_up(flags)
     let attrs = has('nvim') && !has('nvim-0.2.0')
           \ ? cmdline
           \ : {'title': cmdline, 'context': {'query': @/}}
+    let qfWinView = winsaveview()
     if qf
+      call setqflist(list)
       call setqflist([], a:flags.append ? 'a' : 'r', attrs)
     else
+      call setloclist(0, list)
       call setloclist(0, [], a:flags.append ? 'a' : 'r', attrs)
     endif
+    call winrestview(qfWinView)
   catch /E118/
   endtry
 
